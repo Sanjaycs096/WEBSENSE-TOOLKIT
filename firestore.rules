@@ -1,0 +1,116 @@
+/**
+ * Core Philosophy: This ruleset governs the WebSense Toolkit's Firebase ancillary data.
+ * With the primary database migrated to Supabase, Firestore's role is narrowed to
+ * storing essential authentication context and user role information. The security model
+ * enforces strict user ownership for personal data and a role-based system for
+ * administrative access, ensuring a clear separation of concerns.
+ *
+ * Data Structure:
+ * - /users/{userId}: Stores a minimal user profile, primarily for linking Firebase Auth
+ *   UIDs to user data context needed within Firebase services.
+ * - /roles_admin/{userId}: An access control collection. The existence of a document
+ *   for a user in this collection grants them administrative privileges across the ruleset.
+ *
+ * Key Security Decisions:
+ * - User Isolation: Users can only access their own document within the /users collection.
+ *   Listing users is explicitly disabled to prevent user enumeration attacks.
+ * - Admin Privileges: A separate `/roles_admin` collection is used to grant admin rights.
+ *   This is a performant and secure pattern that avoids `get()` calls in other rules.
+ *   Admins can read any user's profile but cannot modify them, respecting Supabase as
+ *   the single source of truth for user data. Admins can manage other admins.
+ * - Default Deny: All paths and operations are denied by default, with access
+ *   explicitly granted through specific rules.
+ */
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // ------------------------------------------------------------------------
+    // Helper Functions
+    // ------------------------------------------------------------------------
+
+    /**
+     * Checks if a user is authenticated.
+     */
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    /**
+     * Checks if the authenticated user's UID matches the requested document's ID.
+     */
+    function isOwner(userId) {
+      return isSignedIn() && request.auth.uid == userId;
+    }
+
+    /**
+     * Checks for ownership on an existing document. Used for safe updates and deletes.
+     */
+    function isExistingOwner(userId) {
+      return isOwner(userId) && resource != null;
+    }
+
+    /**
+     * Checks if a user has admin privileges.
+     * Admin status is granted by the existence of a document in the roles_admin collection.
+     */
+    function isAdmin() {
+      return isSignedIn() && exists(/databases/$(database)/documents/roles_admin/$(request.auth.uid));
+    }
+
+    /**
+     * Validates that the `firebaseUid` field in a new user document matches the document's ID.
+     * Enforces relational integrity between the auth UID and the document data.
+     */
+    function isCreatingValidUser(userId) {
+      return request.resource.data.firebaseUid == userId;
+    }
+
+    /**
+     * Ensures critical relational fields in a user document are immutable on update.
+     * Prevents re-associating a user document with a different Firebase Auth UID.
+     */
+    function isUpdatingValidUser() {
+      return request.resource.data.firebaseUid == resource.data.firebaseUid;
+    }
+
+
+    // ------------------------------------------------------------------------
+    // Collection Rules
+    // ------------------------------------------------------------------------
+
+    /**
+     * @description Manages user profile information.
+     * @path /users/{userId}
+     * @allow (get) The document owner or an admin can read the user profile.
+     * @allow (create) An authenticated user can create their own user profile document.
+     * @deny (list) No user can list all documents in the /users collection.
+     * @deny (update) A user trying to update another user's profile is denied.
+     * @principle Restricts access to a user's own data tree and enforces relational integrity.
+     */
+    match /users/{userId} {
+      allow get: if isOwner(userId) || isAdmin();
+      allow list: if false;
+      allow create: if isOwner(userId) && isCreatingValidUser(userId);
+      allow update: if isExistingOwner(userId) && isUpdatingValidUser();
+      allow delete: if isExistingOwner(userId);
+    }
+
+    /**
+     * @description Defines which users have administrative privileges.
+     * @path /roles_admin/{userId}
+     * @allow (create) An existing admin can create a document to grant another user admin rights.
+     * @allow (list) An admin can list all other admins.
+     * @deny (delete) A non-admin user cannot revoke another user's admin rights.
+     * @deny (get) A non-admin user cannot check if another user is an admin.
+     * @principle Enforces a role-based access control (RBAC) model for administrative actions.
+     */
+    match /roles_admin/{userId} {
+      allow get: if isAdmin();
+      allow list: if isAdmin();
+      allow create: if isAdmin();
+      allow update: if isAdmin() && resource != null;
+      allow delete: if isAdmin() && resource != null;
+    }
+  }
+}

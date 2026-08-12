@@ -1,0 +1,314 @@
+{
+  "entities": {
+    "User": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "User",
+      "type": "object",
+      "description": "Represents a user of the WebSense Toolkit.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the user entity."
+        },
+        "firebaseUid": {
+          "type": "string",
+          "description": "Unique Firebase user ID, used as a foreign key."
+        },
+        "email": {
+          "type": "string",
+          "description": "User's email address.",
+          "format": "email"
+        },
+        "createdAt": {
+          "type": "string",
+          "description": "Timestamp of when the user was created.",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "id",
+        "firebaseUid",
+        "email",
+        "createdAt"
+      ]
+    },
+    "IpScan": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "IpScan",
+      "type": "object",
+      "description": "Represents a scan of an IP address.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the IP scan."
+        },
+        "userId": {
+          "type": "string",
+          "description": "Reference to User. (Relationship: User 1:N IpScan)"
+        },
+        "ipAddress": {
+          "type": "string",
+          "description": "The IP address that was scanned."
+        },
+        "isp": {
+          "type": "string",
+          "description": "The Internet Service Provider associated with the IP address."
+        },
+        "country": {
+          "type": "string",
+          "description": "The country associated with the IP address."
+        },
+        "vpnDetected": {
+          "type": "boolean",
+          "description": "Indicates whether a VPN was detected for the IP address."
+        },
+        "riskScore": {
+          "type": "number",
+          "description": "The risk score associated with the IP address."
+        },
+        "createdAt": {
+          "type": "string",
+          "description": "Timestamp of when the IP scan was performed.",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "id",
+        "userId",
+        "ipAddress",
+        "isp",
+        "country",
+        "vpnDetected",
+        "riskScore",
+        "createdAt"
+      ]
+    },
+    "UrlScan": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "UrlScan",
+      "type": "object",
+      "description": "Represents a scan of a URL.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the URL scan."
+        },
+        "userId": {
+          "type": "string",
+          "description": "Reference to User. (Relationship: User 1:N UrlScan)"
+        },
+        "url": {
+          "type": "string",
+          "description": "The URL that was scanned."
+        },
+        "sslValid": {
+          "type": "boolean",
+          "description": "Indicates whether the SSL certificate for the URL is valid."
+        },
+        "threatLevel": {
+          "type": "string",
+          "description": "The threat level associated with the URL."
+        },
+        "headersScore": {
+          "type": "number",
+          "description": "The score based on the HTTP headers of the URL."
+        },
+        "createdAt": {
+          "type": "string",
+          "description": "Timestamp of when the URL scan was performed.",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "id",
+        "userId",
+        "url",
+        "sslValid",
+        "threatLevel",
+        "headersScore",
+        "createdAt"
+      ]
+    },
+    "PasswordCheck": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "PasswordCheck",
+      "type": "object",
+      "description": "Represents a password check performed by a user.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the password check."
+        },
+        "userId": {
+          "type": "string",
+          "description": "Reference to User. (Relationship: User 1:N PasswordCheck)"
+        },
+        "strengthScore": {
+          "type": "number",
+          "description": "The strength score of the password."
+        },
+        "entropy": {
+          "type": "number",
+          "description": "The entropy of the password."
+        },
+        "breached": {
+          "type": "boolean",
+          "description": "Indicates whether the password has been found in any data breaches."
+        },
+        "createdAt": {
+          "type": "string",
+          "description": "Timestamp of when the password check was performed.",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "id",
+        "userId",
+        "strengthScore",
+        "entropy",
+        "breached",
+        "createdAt"
+      ]
+    },
+    "AiImageCheck": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "AiImageCheck",
+      "type": "object",
+      "description": "Represents an AI image authenticity check performed by a user.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the AI image check."
+        },
+        "userId": {
+          "type": "string",
+          "description": "Reference to User. (Relationship: User 1:N AiImageCheck)"
+        },
+        "confidence": {
+          "type": "number",
+          "description": "The confidence level that the image is AI-generated."
+        },
+        "verdict": {
+          "type": "string",
+          "description": "The verdict on whether the image is AI-generated or not."
+        },
+        "createdAt": {
+          "type": "string",
+          "description": "Timestamp of when the AI image check was performed.",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "id",
+        "userId",
+        "confidence",
+        "verdict",
+        "createdAt"
+      ]
+    },
+    "SafetyScore": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "SafetyScore",
+      "type": "object",
+      "description": "Represents a user's WebSense Safety Score.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the safety score."
+        },
+        "userId": {
+          "type": "string",
+          "description": "Reference to User. (Relationship: User 1:N SafetyScore)"
+        },
+        "totalScore": {
+          "type": "number",
+          "description": "The user's total WebSense Safety Score."
+        },
+        "createdAt": {
+          "type": "string",
+          "description": "Timestamp of when the safety score was calculated.",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "id",
+        "userId",
+        "totalScore",
+        "createdAt"
+      ]
+    },
+    "Alert": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "Alert",
+      "type": "object",
+      "description": "Represents an alert configured by a user.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the alert."
+        },
+        "userId": {
+          "type": "string",
+          "description": "Reference to User. (Relationship: User 1:N Alert)"
+        },
+        "type": {
+          "type": "string",
+          "description": "The type of alert (e.g., IP change, website downtime, breach exposure)."
+        },
+        "enabled": {
+          "type": "boolean",
+          "description": "Indicates whether the alert is enabled or disabled."
+        }
+      },
+      "required": [
+        "id",
+        "userId",
+        "type",
+        "enabled"
+      ]
+    }
+  },
+  "auth": {
+    "providers": [
+      "password",
+      "anonymous"
+    ]
+  },
+  "firestore": {
+    "structure": [
+      {
+        "path": "/users/{userId}",
+        "definition": {
+          "entityName": "User",
+          "schema": {
+            "$ref": "#/backend/entities/User"
+          },
+          "description": "Stores user profile information. Primarily used for authentication context and any Firebase-specific user management. Data is mirrored from Supabase for Firebase Authentication context.",
+          "params": [
+            {
+              "name": "userId",
+              "description": "The unique Firebase User ID."
+            }
+          ]
+        }
+      },
+      {
+        "path": "/roles_admin/{userId}",
+        "definition": {
+          "entityName": "RoleAdmin",
+          "schema": {
+            "$ref": "#/backend/entities/User"
+          },
+          "description": "Indicates if a user has admin privileges. The mere existence of a document at this path grants admin access to Firebase resources via security rules. Used for Cloud Functions authorization.",
+          "params": [
+            {
+              "name": "userId",
+              "description": "The unique Firebase User ID."
+            }
+          ]
+        }
+      }
+    ],
+    "reasoning": "Given the requirement to migrate user scan history to Supabase while keeping Firebase for authentication and leveraging Firebase Cloud Functions, the Firestore structure is designed to primarily manage ancillary data or configurations tightly coupled with Firebase features. The primary data storage and relationships are handled within Supabase. Therefore, the Firestore structure will focus on user roles and any configurations needed by Cloud Functions. \n\nThe design prioritizes Authorization Independence by avoiding `get()` calls in security rules. User roles, if needed for Cloud Functions, are managed through dedicated collections instead of custom claims.\n\n*   **Authorization Independence:** By storing user roles directly in a dedicated collection (`/roles_admin/{userId}`), authorization rules can be evaluated without needing to fetch additional documents. This makes the system more robust and easier to reason about.\n*   **QAPs (Rules are not Filters):** Storing data related to user roles in dedicated collections ensures secure list operations. For instance, listing admin roles can be done securely without exposing other data.\n\nThe structure assumes minimal data duplication in Firestore to reduce costs since Supabase will be the primary database. However, critical attributes that are needed for authorization purposes in cloud functions should be duplicated to keep the functions independent from Supabase.\n"
+  }
+}
