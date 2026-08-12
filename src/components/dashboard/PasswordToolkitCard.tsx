@@ -202,7 +202,7 @@ export function PasswordToolkitCard({ onScanComplete, weights }: Props) {
               </div>
             )}
             <p className="text-xs text-muted-foreground mt-2">
-                This check is simulated. In a real scenario, we would use a k-anonymity model to protect your password's privacy.
+                This check is simulated. In a real scenario, we would use a k-anonymity model to protect your password&apos;s privacy.
             </p>
           </TabsContent>
         </Tabs>
