@@ -195,12 +195,12 @@ export function SpeedTestCard({ onScanComplete }: Props) {
         <CardTitle className="flex items-center gap-2">
           <Wifi /> Internet Speed Test
         </CardTitle>
-        <CardDescription>Measure your connection's performance.</CardDescription>
+        <CardDescription>Measure your connection&apos;s performance.</CardDescription>
       </CardHeader>
       <CardContent className="space-y-4">
         <div className="h-40 w-full">
             {testState === 'idle' && (
-              <div className="flex h-full items-center justify-center text-muted-foreground">Click "Start Test" to begin.</div>
+              <div className="flex h-full items-center justify-center text-muted-foreground">Click &quot;Start Test&quot; to begin.</div>
             )}
             {error && (
                 <div className="flex h-full items-center justify-center">

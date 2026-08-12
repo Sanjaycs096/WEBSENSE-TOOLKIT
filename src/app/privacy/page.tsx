@@ -32,7 +32,7 @@ export default function PrivacyPage() {
             <ul>
               <li><strong>Passwords You Check:</strong> Passwords entered into the Password Toolkit for strength or leak checks are analyzed entirely within your browser (client-side) and are never sent to our servers or stored.</li>
               <li><strong>Images You Analyze:</strong> Images uploaded to the AI Image Authenticity Checker are sent to a third-party AI service for processing. They are processed temporarily and are not stored on our servers after the analysis is complete.</li>
-              <li><strong>Personal Fingerprinting Data:</strong> We do not engage in browser or device fingerprinting for the purpose of tracking you across different sites. The information shown in the "Digital Footprint" visualizer is for educational purposes and is not stored.</li>
+              <li><strong>Personal Fingerprinting Data:</strong> We do not engage in browser or device fingerprinting for the purpose of tracking you across different sites. The information shown in the &quot;Digital Footprint&quot; visualizer is for educational purposes and is not stored.</li>
             </ul>
             
             <h2>Firebase Usage</h2>

@@ -17,7 +17,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { useRouter } from 'next/navigation';
 
 type Sections = {
-  [key: string]: React.RefObject<HTMLDivElement>;
+  [key: string]: React.RefObject<HTMLDivElement | null>;
 };
 
 type Props = {
@@ -29,7 +29,7 @@ export function Header({ sections }: Props) {
   const auth = useAuth();
   const router = useRouter();
 
-  const scrollToSection = (ref: React.RefObject<HTMLDivElement>) => {
+  const scrollToSection = (ref: React.RefObject<HTMLDivElement | null>) => {
     ref.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
   };
   
